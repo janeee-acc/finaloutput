@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login - Student Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+<link rel="stylesheet" href="style.css">
+<style>
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f3f5f9;
+        min-height: 100vh;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+    }
+    .login-container {
+        background: #ffffff;
+        border: 1.5px solid #cfd6e4;
+        border-radius: 12px;
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 8px 24px rgba(14, 44, 117, 0.08);
+    }
+    .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    /* --- Logo Layout --- */
+    .login-logo {
+        position: relative;
+        width: 34px;
+        height: 34px;
+        margin: 0 auto 10px auto;
+    }
+    .login-logo div {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+    }
+    .login-logo .green {
+        background: #9be22d;
+        top: 0;
+        left: 0;
+    }
+    .login-logo .blue {
+        background: #5d7fc9;
+        bottom: 0;
+        right: 0;
+    }
+
+    /* --- Title Styles --- */
+    .login-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 18px;
+        color: #0E2C75;
+        font-weight: 600;
+        margin: 0 0 4px 0;
+    }
+    .login-header p {
+        color: #6d7f9b;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: #1e2f5c;
+        margin-bottom: 6px;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #cfd6e4;
+        border-radius: 6px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        color: #1e2f5c;
+        background: #fafbfc;
+        transition: all 0.3s;
+    }
+    .form-group input:focus {
+        outline: none;
+        border-color: #1e2f5c;
+        background: #ffffff;
+    }
+    .login-btn {
+        width: 100%;
+        background: #1e2f5c;
+        color: #ffffff;
+        border: none;
+        padding: 13px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        transition: background 0.3s;
+    }
+    .login-btn:hover {
+        background: #0E2C75;
+    }
+    .error-msg {
+        color: #d92d20;
+        font-size: 13px;
+        margin-top: 14px;
+        text-align: center;
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="login-header">
+        <div class="login-logo">
+            <div class="green"></div>
+            <div class="blue"></div>
+        </div>
+        <h2>Student Portal</h2>
+        <p>Sign in to manage your schedule</p>
+    </div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+            <label for="studentId">Student ID</label>
+            <input type="text" id="studentId" placeholder="e.g., 2026-0001" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="login-btn">Sign In</button>
+        <p class="error-msg" id="loginError">Invalid Student ID or Password.</p>
+    </form>
+</div>
+
+<script>
+    const VALID_STUDENT_ID = "2023-7406-A";
+    const VALID_PASSWORD = "12345";
+
+    function handleLogin(event) {
+        event.preventDefault();
+        
+        const studentIdInput = document.getElementById('studentId').value.trim();
+        const passwordInput = document.getElementById('password').value;
+        const errorMsg = document.getElementById('loginError');
+
+        if (studentIdInput === VALID_STUDENT_ID && passwordInput === VALID_PASSWORD) {
+            sessionStorage.setItem('isLoggedIn', 'true');
+            sessionStorage.setItem('studentId', studentIdInput);
+            errorMsg.style.display = 'none';
+            window.location.href = 'index.html';
+        } else {
+            errorMsg.style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>

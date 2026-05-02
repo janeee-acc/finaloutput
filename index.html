@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+<link rel="stylesheet" href="style.css">
+
+<style>
+    .user {
+        position: relative;
+        cursor: pointer;
+    }
+    .user-dropdown {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: #ffffff;
+        border: 1px solid #cfd6e4;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 1000;
+        width: 130px;
+        overflow: hidden;
+    }
+    .user-dropdown.show {
+        display: block;
+    }
+    .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        color: #1e2f5c;
+        text-decoration: none;
+        font-family: 'Poppins', sans-serif;
+        font-size: 13px;
+        transition: background 0.2s ease;
+    }
+    .dropdown-item:hover {
+        background: #f3f5f9;
+    }
+    .dropdown-item span {
+        font-size: 18px;
+        color: #f04438;
+    }
+
+    /* CARD LINK STYLES */
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card-link:hover {
+        transform: translateY(-4px);
+    }
+
+    /* SECTION TITLE & SUBTITLE STYLES */
+    .section-header-group {
+        margin: 32px 0 20px 0;
+    }
+
+    .section-title {
+        color: #0E2C75;
+        font-family: 'Playfair Display', serif;
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .section-subtitle {
+        color: #6d7f9b;
+        font-family: 'Poppins', sans-serif;
+        font-size: 13px;
+        font-weight: 400;
+        margin: 0;
+    }
+
+    /* Premium Custom Modal Styles */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(14, 44, 117, 0.4);
+        backdrop-filter: blur(4px);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+    .modal-card {
+        background: #ffffff;
+        border: 1.5px solid #cfd6e4;
+        border-radius: 12px;
+        padding: 30px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(14, 44, 117, 0.12);
+        font-family: 'Poppins', sans-serif;
+        animation: slideUp 0.3s cubic-bezier(0.1, 0.8, 0.3, 1);
+    }
+    @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-icon-container {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background: #fff9f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px auto;
+    }
+    .modal-icon-container #modalIcon {
+        font-size: 28px;
+        color: #f79009;
+    }
+    .modal-card h3 {
+        color: #0E2C75;
+        font-family: 'Playfair Display', serif;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    .modal-card p {
+        color: #6d7f9b;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+    }
+    .modal-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+    }
+    .modal-btn {
+        background: #0E2C75;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 24px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+    .modal-btn.secondary {
+        background: #ffffff;
+        color: #6d7f9b;
+        border: 1px solid #cfd6e4;
+    }
+    .modal-btn:hover {
+        background: #1e2f5c;
+    }
+    .modal-btn.secondary:hover {
+        background: #f8f9fa;
+        color: #1e2f5c;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <div class="logo">
+        <div class="logo-icon">
+            <div class="green"></div>
+            <div class="blue"></div>
+        </div>
+        <div class="logo-text">Student Portal</div>
+    </div>
+
+    <div class="menu">
+        <a class="active" href="index.html">
+            <span class="material-symbols-outlined">dashboard</span>
+            Dashboard
+        </a>
+
+        <a href="manage-grade.html">
+            <span class="material-symbols-outlined">analytics</span>
+            Grade
+        </a>
+
+        <a href="enrolled.html">
+            <span class="material-symbols-outlined">description</span>
+            Enrolled
+        </a>
+
+        <a href="courses.html">
+            <span class="material-symbols-outlined">add_box</span>
+            Courses
+        </a>
+    </div>
+</div>
+
+<div class="main">
+    <div class="top">
+        <h2>Dashboard</h2>
+
+        <div class="user" id="userContainer" onclick="toggleDropdown()">
+            <div class="profile">
+                <span class="material-symbols-outlined">person</span>
+            </div>
+
+            <div class="user-info">
+                <strong>Jane Gregori</strong><br>
+                <span>Student</span>
+            </div>
+
+            <span class="material-symbols-outlined arrow">expand_more</span>
+
+            <div id="userDropdown" class="user-dropdown">
+                <a href="#" class="dropdown-item" onclick="confirmLogout(event)">
+                    <span class="material-symbols-outlined">logout</span>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="welcome">
+        <h3>Hello Jane Gregori.</h3>
+        <p>
+            Welcome to the Student Enrollment Portal. This system allows you to enroll in courses,
+            manage your subjects, and monitor your academic enrollment status in a structured and efficient manner.
+        </p>
+    </div>
+
+    <div class="section-header-group">
+        <h3 class="section-title">Your Academic Overview</h3>
+        <p class="section-subtitle">A quick summary of your current learning journey and academic status.</p>
+    </div>
+
+    <div class="cards">
+        <a href="enrolled.html" class="card-link">
+            <div class="card yellow">
+                <h4>Enrolled Courses</h4>
+                <div class="num" id="enrolledCount">00</div>
+                <p>3 Major Courses</p>
+            </div>
+        </a>
+
+        <a href="courses.html" class="card-link">
+            <div class="card pink">
+                <h4>Available Courses</h4>
+                <div class="num" id="availableCount">00</div>
+                <p>Eligible to Enroll</p>
+            </div>
+        </a>
+
+        <a href="manage-grade.html" class="card-link">
+            <div class="card gray">
+                <h4>Prerequisites</h4>
+                <div class="num">01</div>
+                <p>Grade Dependent</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div id="portalModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-icon-container">
+            <span id="modalIcon" class="material-symbols-outlined">warning</span>
+        </div>
+        <h3 id="modalTitle">Confirm Logout</h3>
+        <p id="modalMessage">Are you sure you want to log out of your session?</p>
+        <div class="modal-actions">
+            <button class="modal-btn secondary" id="modalSecondaryBtn" onclick="closePortalModal()">Cancel</button>
+            <button class="modal-btn" id="modalPrimaryBtn" onclick="logout()">Log Out</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+        window.location.href = 'login.html';
+    }
+
+    function toggleDropdown() {
+        const dropdown = document.getElementById('userDropdown');
+        const container = document.getElementById('userContainer');
+        dropdown.classList.toggle('show');
+        container.classList.toggle('active');
+    }
+
+    function confirmLogout(event) {
+        if (event) event.preventDefault();
+        const modal = document.getElementById('portalModal');
+        modal.style.display = "flex";
+    }
+
+    function closePortalModal() {
+        document.getElementById('portalModal').style.display = 'none';
+    }
+
+    function logout() {
+        // Unset the login session states only, leaving all your course activity intact
+        sessionStorage.removeItem('isLoggedIn');
+        sessionStorage.removeItem('studentId');
+        
+        // Move back to the login screen
+        window.location.href = 'login.html';
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.closest('.user')) {
+            const dropdown = document.getElementById('userDropdown');
+            const container = document.getElementById('userContainer');
+            if (dropdown && dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                container.classList.remove('active');
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const enrolled = JSON.parse(localStorage.getItem('enrolledCourses')) || [];
+        
+        document.getElementById('enrolledCount').textContent = enrolled.length < 10 ? `0${enrolled.length}` : enrolled.length;
+        
+        const availableCount = 4 - enrolled.length;
+        document.getElementById('availableCount').textContent = availableCount < 10 ? `0${availableCount}` : availableCount;
+    });
+</script>
+
+</body>
+</html>

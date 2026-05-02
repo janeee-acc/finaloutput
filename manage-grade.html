@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Manage Grade</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+<link rel="stylesheet" href="style.css">
+<style>
+/* Section Header Adjustments */
+.section-header {
+    margin-bottom: 28px;
+}
+.section-header p {
+    color: #6d7f9b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Reorganized Semester Content Area */
+.semester-section {
+    margin-bottom: 40px;
+}
+.semester-title {
+    color: #0E2C75;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #cfd6e4;
+    padding-bottom: 8px;
+}
+
+/* Table Container & Table Restyling for a clean look */
+.table-container {
+    background: #ffffff;
+    border: 1px solid #cfd6e4;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(14, 44, 117, 0.04);
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.grade-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+}
+.grade-table th {
+    background: #f8fafc;
+    color: #1e2f5c;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 16px;
+    border-bottom: 1.5px solid #cfd6e4;
+}
+.grade-table td {
+    padding: 16px;
+    font-size: 14px;
+    color: #445571;
+    border-bottom: 1px solid #f1f4f9;
+    vertical-align: middle;
+}
+.grade-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Subtle typography enhancements inside tables */
+.course-code-text {
+    background: #dfe7f5;
+    color: #1e2f5c;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+.course-title-text {
+    font-weight: 500;
+    color: #1e2f5c;
+}
+
+/* Enhanced input & action styles */
+.grade-input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 180px;
+}
+.grade-input {
+    width: 80px;
+    padding: 8px 12px;
+    border: 1px solid #cfd6e4;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #1e2f5c;
+    text-align: center;
+    background: #ffffff;
+    transition: all 0.2s ease;
+}
+.grade-input:focus {
+    outline: none;
+    border-color: #0E2C75;
+    box-shadow: 0 0 0 3px rgba(14, 44, 117, 0.1);
+}
+.save-btn {
+    background: #5d7fc9;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.2s ease;
+}
+.save-btn:hover {
+    background: #4663a8;
+}
+
+/* Badges for status information */
+.status-badge {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-block;
+}
+.status-badge.in-progress {
+    background: #fff9f2;
+    color: #b25e09;
+    border: 1px solid #ffdcb3;
+}
+.status-badge.graded {
+    background: #edfcf2;
+    color: #12b76a;
+    border: 1px solid #baf4d0;
+}
+
+/* Custom Modal Overlay */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(14, 44, 117, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+.modal-card {
+    background: #ffffff;
+    border: 1.5px solid #cfd6e4;
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(14, 44, 117, 0.12);
+    font-family: 'Poppins', sans-serif;
+    animation: slideUp 0.3s cubic-bezier(0.1, 0.8, 0.3, 1);
+}
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.modal-icon-container {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #edfcf2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px auto;
+}
+#modalIcon {
+    font-size: 28px;
+    color: #12b76a;
+}
+.modal-icon-container.error {
+    background: #fdf2f2;
+}
+.modal-icon-container.error #modalIcon {
+    color: #f04438;
+}
+.modal-icon-container.warning {
+    background: #fff9f2;
+}
+.modal-icon-container.warning #modalIcon {
+    color: #f79009;
+}
+.modal-card h3 {
+    color: #0E2C75;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.modal-card p {
+    color: #6d7f9b;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+.modal-btn {
+    background: #0E2C75;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.modal-btn:hover {
+    background: #1e2f5c;
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo">
+        <div class="logo-icon">
+            <div class="green"></div>
+            <div class="blue"></div>
+        </div>
+        <div class="logo-text">Student Portal</div>
+    </div>
+    <div class="menu">
+        <a href="index.html">
+            <span class="material-symbols-outlined">dashboard</span> Dashboard
+        </a>
+        <a class="active" href="manage-grade.html">
+            <span class="material-symbols-outlined">analytics</span> Grade
+        </a>
+        <a href="enrolled.html">
+            <span class="material-symbols-outlined">description</span> Enrolled
+        </a>
+        <a href="courses.html">
+            <span class="material-symbols-outlined">add_box</span> Courses
+        </a>
+    </div>
+</div>
+
+<div class="main">
+    <div class="top">
+        <h2>Manage Grade</h2>
+    </div>
+    <div class="grade-section">
+        <div class="section-header">
+            <p>Review your academic records and input your current grades for enrolled courses. Passing range spans from 1.00 to 3.00.</p>
+        </div>
+
+        <div class="semester-section">
+            <h3 class="semester-title">First Semester Grades</h3>
+            <div class="table-container">
+                <table class="grade-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Course Code</th>
+                            <th style="width: 35%;">Course Title</th>
+                            <th style="width: 10%;">Units</th>
+                            <th style="width: 18%;">Grade Status</th>
+                            <th style="width: 22%;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="firstSemGradeList"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="semester-section">
+            <h3 class="semester-title">Second Semester Grades</h3>
+            <div class="table-container">
+                <table class="grade-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Course Code</th>
+                            <th style="width: 35%;">Course Title</th>
+                            <th style="width: 10%;">Units</th>
+                            <th style="width: 18%;">Grade Status</th>
+                            <th style="width: 22%;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="secondSemGradeList"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="portalModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-icon-container" id="modalIconBg">
+            <span id="modalIcon" class="material-symbols-outlined">check_circle</span>
+        </div>
+        <h3 id="modalTitle">Grade Saved</h3>
+        <p id="modalMessage">Your grade has been updated successfully.</p>
+        <button class="modal-btn" onclick="closePortalModal()">Got it</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    // Explicit map connecting course codes to curriculum semesters
+    const curriculumSemesterMapping = {
+        'CS 101': 1,
+        'MTH 211': 1,
+        'ENG 105': 2,
+        'CS 102': 2
+    };
+
+    document.addEventListener("DOMContentLoaded", function() {
+        renderGradeLists();
+    });
+
+    function renderGradeLists() {
+        const enrolled = JSON.parse(localStorage.getItem('enrolledCourses')) || [];
+        const firstSemList = document.getElementById('firstSemGradeList');
+        const secondSemList = document.getElementById('secondSemGradeList');
+
+        firstSemList.innerHTML = "";
+        secondSemList.innerHTML = "";
+
+        const firstSemCourses = enrolled.filter(course => curriculumSemesterMapping[course.code] === 1);
+        const secondSemCourses = enrolled.filter(course => curriculumSemesterMapping[course.code] === 2);
+
+        // Populate first semester table
+        if (firstSemCourses.length === 0) {
+            firstSemList.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #6d7f9b; padding: 28px;">No first semester courses enrolled.</td></tr>`;
+        } else {
+            firstSemCourses.forEach(course => {
+                firstSemList.innerHTML += createRow(course);
+            });
+        }
+
+        // Populate second semester table
+        if (secondSemCourses.length === 0) {
+            secondSemList.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #6d7f9b; padding: 28px;">No second semester courses enrolled.</td></tr>`;
+        } else {
+            secondSemCourses.forEach(course => {
+                secondSemList.innerHTML += createRow(course);
+            });
+        }
+    }
+
+    function createRow(course) {
+        const cleanId = course.code.replace(/\s+/g, '');
+        const currentGrade = (course.grade && course.grade.trim() !== "") ? parseFloat(course.grade).toFixed(2) : "";
+        
+        // Setup status context 
+        let statusBadgeMarkup = "";
+        if (currentGrade !== "") {
+            statusBadgeMarkup = `<span class="status-badge graded">Graded (${currentGrade})</span>`;
+        } else {
+            statusBadgeMarkup = `<span class="status-badge in-progress">In Progress</span>`;
+        }
+
+        return `
+            <tr>
+                <td><span class="course-code-text">${course.code}</span></td>
+                <td><span class="course-title-text">${course.title}</span></td>
+                <td><strong>${course.units}</strong></td>
+                <td>${statusBadgeMarkup}</td>
+                <td>
+                    <div class="grade-input-group">
+                        <input type="text" 
+                               class="grade-input" 
+                               id="grade-${cleanId}" 
+                               value="${currentGrade}" 
+                               placeholder="1.0-3.0">
+                        <button class="save-btn" onclick="saveGradeClick('${course.code}')">
+                            <span class="material-symbols-outlined" style="font-size:16px;">save</span> Save
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+
+    function showGradeModal(title, message, type = 'success') {
+        const modal = document.getElementById('portalModal');
+        const iconBg = document.getElementById('modalIconBg');
+        const icon = document.getElementById('modalIcon');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+
+        if (type === 'success') {
+            iconBg.className = "modal-icon-container";
+            icon.textContent = "check_circle";
+        } else if (type === 'warning') {
+            iconBg.className = "modal-icon-container warning";
+            icon.textContent = "warning";
+        } else {
+            iconBg.className = "modal-icon-container error";
+            icon.textContent = "error";
+        }
+
+        modalTitle.textContent = title;
+        modalMessage.textContent = message;
+        modal.style.display = "flex";
+    }
+
+    function closePortalModal() {
+        document.getElementById('portalModal').style.display = 'none';
+        renderGradeLists();
+    }
+
+    function saveGradeClick(courseCode) {
+        const cleanId = courseCode.replace(/\s+/g, '');
+        const inputVal = document.getElementById(`grade-${cleanId}`).value.trim();
+        const gradeValue = parseFloat(inputVal);
+
+        if (inputVal === "") {
+            showGradeModal("Incomplete Submission", `Please input a grade value to save.`, 'warning');
+            return;
+        }
+
+        if (isNaN(gradeValue) || gradeValue > 3.00 || gradeValue < 1.00) {
+            showGradeModal("Invalid Grade Range", `Grades must fall within the passing range of 1.00 to 3.00. Please check your entry.`, 'error');
+            return;
+        }
+
+        let enrolled = JSON.parse(localStorage.getItem('enrolledCourses')) || [];
+        let updated = false;
+
+        enrolled = enrolled.map(course => {
+            if (course.code === courseCode) {
+                course.grade = gradeValue.toFixed(2);
+                updated = true;
+            }
+            return course;
+        });
+
+        if (updated) {
+            localStorage.setItem('enrolledCourses', JSON.stringify(enrolled));
+            showGradeModal("Grade Recorded", `Your grade for ${courseCode} has been successfully updated to ${gradeValue.toFixed(2)}.`, 'success');
+        }
+    }
+</script>
+</body>
+</html>

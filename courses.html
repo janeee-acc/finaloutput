@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Courses</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css">
+<style>
+    .semester-section {
+        margin-bottom: 40px;
+    }
+    .semester-title {
+        color: #0E2C75;
+        font-family: 'Playfair Display', serif;
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        border-bottom: 2px solid #cfd6e4;
+        padding-bottom: 8px;
+    }
+    
+    .completed-badge {
+        background: #edfcf2;
+        color: #12b76a;
+        font-size: 12px;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 4px;
+        border: 1px solid #12b76a;
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+
+    .grade-notice {
+        font-size: 11px;
+        color: #d97706;
+        display: block;
+        margin-top: 4px;
+        font-weight: 400;
+    }
+
+    .grade-link {
+        color: #0E2C75;
+        text-decoration: underline;
+        font-weight: 500;
+    }
+
+    /* Custom Modal Overlay */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(14, 44, 117, 0.4);
+        backdrop-filter: blur(4px);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-card {
+        background: #ffffff;
+        border: 1.5px solid #cfd6e4;
+        border-radius: 12px;
+        padding: 30px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(14, 44, 117, 0.12);
+        font-family: 'Poppins', sans-serif;
+        animation: slideUp 0.3s cubic-bezier(0.1, 0.8, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-icon-container {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background: #edfcf2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px auto;
+    }
+
+    #modalIcon {
+        font-size: 28px;
+        color: #12b76a;
+    }
+
+    .modal-icon-container.warning {
+        background: #fff9f2;
+    }
+    .modal-icon-container.warning #modalIcon {
+        color: #f79009;
+    }
+
+    .modal-icon-container.error {
+        background: #fdf2f2;
+    }
+    .modal-icon-container.error #modalIcon {
+        color: #f04438;
+    }
+
+    .modal-card h3 {
+        color: #0E2C75;
+        font-family: 'Playfair Display', serif;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .modal-card p {
+        color: #6d7f9b;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+    }
+
+    .modal-btn {
+        background: #0E2C75;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 24px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .modal-btn:hover {
+        background: #1e2f5c;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <div class="logo">
+        <div class="logo-icon">
+            <div class="green"></div>
+            <div class="blue"></div>
+        </div>
+        <div class="logo-text">Student Portal</div>
+    </div>
+
+    <div class="menu">
+        <a href="index.html">
+            <span class="material-symbols-outlined">dashboard</span> Dashboard
+        </a>
+        <a href="manage-grade.html">
+            <span class="material-symbols-outlined">analytics</span> Grade
+        </a>
+        <a href="enrolled.html">
+            <span class="material-symbols-outlined">description</span> Enrolled
+        </a>
+        <a class="active" href="courses.html">
+            <span class="material-symbols-outlined">add_box</span> Courses
+        </a>
+    </div>
+</div>
+
+<div class="main">
+    <div class="top">
+        <h2>Available Courses</h2>
+    </div>
+
+    <div class="courses-section">
+        <div class="section-header">
+            <p>Browse your curriculum by semester. Input your grades on the <a href="manage-grade.html" class="grade-link">Grade page</a> to satisfy prerequisites.</p>
+        </div>
+
+        <div class="semester-section">
+            <h3 class="semester-title">First Semester Courses</h3>
+            <div class="courses-grid" id="firstSemesterGrid"></div>
+        </div>
+
+        <div class="semester-section">
+            <h3 class="semester-title">Second Semester Courses</h3>
+            <div class="courses-grid" id="secondSemesterGrid"></div>
+        </div>
+    </div>
+</div>
+
+<div id="portalModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-icon-container" id="modalIconBg">
+            <span id="modalIcon" class="material-symbols-outlined">check_circle</span>
+        </div>
+        <h3 id="modalTitle">Success</h3>
+        <p id="modalMessage">Action completed successfully.</p>
+        <button class="modal-btn" id="modalActionBtn" onclick="closePortalModal()">Got it</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderCourses();
+    });
+
+    function renderCourses() {
+        // Fetch current enrolled students data using the class structure's sessionStorage logic
+        const enrolled = JSON.parse(localStorage.getItem('enrolledCourses')) || [];
+        const firstSemGrid = document.getElementById('firstSemesterGrid');
+        const secondSemGrid = document.getElementById('secondSemesterGrid');
+
+        firstSemGrid.innerHTML = "";
+        secondSemGrid.innerHTML = "";
+
+        // Core curriculum data structure
+        const curriculum = [
+            { code: 'CS 101', title: 'Introduction to Computing', units: 3, semester: 1, prereq: 'None' },
+            { code: 'MTH 211', title: 'Discrete Mathematics', units: 3, semester: 1, prereq: 'None' },
+            { code: 'ENG 105', title: 'Technical Writing', units: 3, semester: 2, prereq: 'None' },
+            { code: 'CS 102', title: 'Advanced Programming', units: 3, semester: 2, prereq: 'CS 101' }
+        ];
+
+        curriculum.forEach(course => {
+            const cleanId = course.code.replace(/\s+/g, '');
+            const enrolledData = enrolled.find(e => e.code === course.code);
+
+            // Get dynamic enrollment numbers based on the updated courseCapacities map in script.js
+            const maxCapacity = courseCapacities[course.code] || 40;
+            const currentEnrolled = enrolled.filter(c => c.code === course.code).length;
+            const percentage = Math.min((currentEnrolled / maxCapacity) * 100, 100);
+
+            let statusMarkup = "";
+            let buttonMarkup = "";
+            let cardStyle = "";
+
+            if (enrolledData) {
+                if (enrolledData.grade && enrolledData.grade.trim() !== "") {
+                    // Completed course
+                    statusMarkup = `<span class="completed-badge">Completed (Grade: ${enrolledData.grade})</span>`;
+                    buttonMarkup = `<button class="enroll-btn" disabled style="background: #cfd6e4; color: #6d7f9b; cursor: default;">Enrolled</button>`;
+                    cardStyle = `style="opacity: 0.8; background-color: #fcfcfd;"`;
+                } else {
+                    // Currently actively enrolled without grade yet
+                    statusMarkup = `<span class="grade-notice" style="color:#0E2C75; margin-bottom:10px; display:block;">✍️ Course currently in progress</span>`;
+                    buttonMarkup = `<button class="enroll-btn" disabled style="background: #cfd6e4; color: #6d7f9b; cursor: default;">Enrolled</button>`;
+                }
+            } else {
+                // Not enrolled yet
+                if (course.prereq !== 'None') {
+                    statusMarkup = `<span class="grade-notice">⚠️ Requires a passing grade in ${course.prereq}</span>`;
+                }
+                buttonMarkup = `<button class="enroll-btn" id="btn-${cleanId}" onclick="enrollCourse('${course.code}', '${course.title}', ${course.units})">Enroll</button>`;
+            }
+
+            const cardHTML = `
+                <div class="course-card" id="card-${cleanId}" ${cardStyle}>
+                    <div class="course-header">
+                        <span class="course-code">${course.code}</span>
+                        <span class="course-units">${course.units} Units</span>
+                    </div>
+                    <h4>${course.title}</h4>
+                    ${statusMarkup}
+                    <p class="prereq">Prerequisite: <span>${course.prereq}</span></p>
+                    <div class="capacity-bar" style="margin-top: 10px;">
+                        <div class="capacity-fill" style="width: ${percentage}%;"></div>
+                    </div>
+                    <div class="capacity-text" style="margin-bottom: 12px; font-size: 12px; color: #6d7f9b;">
+                        <span>Capacity: ${currentEnrolled}/${maxCapacity}</span>
+                    </div>
+                    ${buttonMarkup}
+                </div>
+            `;
+
+            if (course.semester === 1) {
+                firstSemGrid.innerHTML += cardHTML;
+            } else {
+                secondSemGrid.innerHTML += cardHTML;
+            }
+        });
+    }
+
+    function showCustomModal(title, msg, type = 'success', redirect = false) {
+        const modal = document.getElementById('portalModal');
+        const bg = document.getElementById('modalIconBg');
+        const icon = document.getElementById('modalIcon');
+        const titleEl = document.getElementById('modalTitle');
+        const msgEl = document.getElementById('modalMessage');
+        const btn = document.getElementById('modalActionBtn');
+
+        bg.className = "modal-icon-container " + type;
+        
+        if (type === 'success') {
+            icon.textContent = "check_circle";
+        } else if (type === 'warning') {
+            icon.textContent = "warning";
+        } else {
+            icon.textContent = "error";
+        }
+
+        titleEl.textContent = title;
+        msgEl.textContent = msg;
+        modal.style.display = "flex";
+
+        btn.onclick = function() {
+            modal.style.display = "none";
+            if (redirect) {
+                window.location.href = "manage-grade.html";
+            } else {
+                renderCourses();
+            }
+        };
+    }
+
+    function closePortalModal() {
+        document.getElementById('portalModal').style.display = 'none';
+        renderCourses();
+    }
+</script>
+
+</body>
+</html>

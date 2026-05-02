@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Enrolled</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css">
+<style>
+    /* Section Header Adjustments */
+    .section-header {
+        margin-bottom: 28px;
+    }
+    .section-header p {
+        color: #6d7f9b;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    /* Reorganized Semester Content Area */
+    .semester-section {
+        margin-bottom: 40px;
+    }
+    .semester-title {
+        color: #0E2C75;
+        font-family: 'Playfair Display', serif;
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        border-bottom: 2px solid #cfd6e4;
+        padding-bottom: 8px;
+    }
+
+    /* Table Container & Table Restyling */
+    .table-container {
+        background: #ffffff;
+        border: 1px solid #cfd6e4;
+        border-radius: 12px;
+        padding: 8px;
+        box-shadow: 0 4px 12px rgba(14, 44, 117, 0.04);
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+    .enrolled-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-family: 'Poppins', sans-serif;
+    }
+    .enrolled-table th {
+        background: #f8fafc;
+        color: #1e2f5c;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 16px;
+        border-bottom: 1.5px solid #cfd6e4;
+    }
+    .enrolled-table td {
+        padding: 16px;
+        font-size: 14px;
+        color: #445571;
+        border-bottom: 1px solid #f1f4f9;
+        vertical-align: middle;
+    }
+    .enrolled-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Subtle typography enhancements inside tables */
+    .course-code-text {
+        background: #dfe7f5;
+        color: #1e2f5c;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+    .course-title-text {
+        font-weight: 500;
+        color: #1e2f5c;
+    }
+
+    /* Action Buttons with specified styling */
+    .drop-btn {
+        background: #5d7fc9;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 24px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: background 0.2s ease;
+    }
+    .drop-btn:hover {
+        background: #4663a8;
+    }
+
+    /* Badges for status information */
+    .status-badge {
+        font-size: 12px;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 6px;
+        display: inline-block;
+    }
+    .status-badge.enrolled {
+        background: #edfcf2;
+        color: #12b76a;
+        border: 1px solid #baf4d0;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(14, 44, 117, 0.4);
+        backdrop-filter: blur(4px);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+    .modal-card {
+        background: #ffffff;
+        border: 1.5px solid #cfd6e4;
+        border-radius: 12px;
+        padding: 30px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(14, 44, 117, 0.12);
+        font-family: 'Poppins', sans-serif;
+        animation: slideUp 0.3s cubic-bezier(0.1, 0.8, 0.3, 1);
+    }
+    @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-icon-container {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background: #fff9f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px auto;
+    }
+    .modal-icon-container #modalIcon {
+        font-size: 28px;
+        color: #f79009;
+    }
+    .modal-card h3 {
+        color: #0E2C75;
+        font-family: 'Playfair Display', serif;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    .modal-card p {
+        color: #6d7f9b;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+    }
+    .modal-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+    }
+    .modal-btn {
+        background: #0E2C75;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 24px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+    .modal-btn.secondary {
+        background: #ffffff;
+        color: #6d7f9b;
+        border: 1px solid #cfd6e4;
+    }
+    .modal-btn:hover {
+        background: #1e2f5c;
+    }
+    .modal-btn.secondary:hover {
+        background: #f8f9fa;
+        color: #1e2f5c;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <div class="logo">
+        <div class="logo-icon">
+            <div class="green"></div>
+            <div class="blue"></div>
+        </div>
+        <div class="logo-text">Student Portal</div>
+    </div>
+
+    <div class="menu">
+        <a href="index.html">
+            <span class="material-symbols-outlined">dashboard</span> Dashboard
+        </a>
+        <a href="manage-grade.html">
+            <span class="material-symbols-outlined">analytics</span> Grade
+        </a>
+        <a class="active" href="enrolled.html">
+            <span class="material-symbols-outlined">description</span> Enrolled
+        </a>
+        <a href="courses.html">
+            <span class="material-symbols-outlined">add_box</span> Courses
+        </a>
+    </div>
+</div>
+
+<div class="main">
+    <div class="top">
+        <h2>Enrolled Courses</h2>
+    </div>
+
+    <div class="enrolled-section">
+        <div class="section-header">
+            <p>Review your active enrollments organized by your curriculum schedule.</p>
+        </div>
+
+        <div class="semester-section">
+            <h3 class="semester-title">First Semester Enrollments</h3>
+            <div class="table-container">
+                <table class="enrolled-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Course Code</th>
+                            <th style="width: 40%;">Course Title</th>
+                            <th style="width: 10%;">Units</th>
+                            <th style="width: 18%;">Status</th>
+                            <th style="width: 17%;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="firstSemEnrolledList"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="semester-section">
+            <h3 class="semester-title">Second Semester Enrollments</h3>
+            <div class="table-container">
+                <table class="enrolled-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Course Code</th>
+                            <th style="width: 40%;">Course Title</th>
+                            <th style="width: 10%;">Units</th>
+                            <th style="width: 18%;">Status</th>
+                            <th style="width: 17%;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="secondSemEnrolledList"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="portalModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-icon-container">
+            <span id="modalIcon" class="material-symbols-outlined">warning</span>
+        </div>
+        <h3 id="modalTitle">Confirm Action</h3>
+        <p id="modalMessage">Are you sure you want to proceed?</p>
+        <div class="modal-actions">
+            <button class="modal-btn secondary" id="modalSecondaryBtn">Cancel</button>
+            <button class="modal-btn" id="modalPrimaryBtn">Proceed</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    const curriculumSemesterMapping = {
+        'CS 101': 1,
+        'MTH 211': 1,
+        'ENG 105': 2,
+        'CS 102': 2
+    };
+
+    function confirmDropCourse(courseCode) {
+        const modal = document.getElementById('portalModal');
+        const title = document.getElementById('modalTitle');
+        const message = document.getElementById('modalMessage');
+        const primaryBtn = document.getElementById('modalPrimaryBtn');
+        const secondaryBtn = document.getElementById('modalSecondaryBtn');
+
+        title.textContent = "Drop Course";
+        message.textContent = `Are you sure you want to drop ${courseCode} from your schedule?`;
+        
+        modal.style.display = "flex";
+
+        secondaryBtn.onclick = function() {
+            modal.style.display = "none";
+        };
+
+        primaryBtn.onclick = function() {
+            dropCourse(courseCode);
+            modal.style.display = "none";
+            location.reload();
+        };
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        renderEnrolledLists();
+    });
+
+    function renderEnrolledLists() {
+        const enrolled = JSON.parse(localStorage.getItem('enrolledCourses')) || [];
+        const firstSemList = document.getElementById('firstSemEnrolledList');
+        const secondSemList = document.getElementById('secondSemEnrolledList');
+
+        firstSemList.innerHTML = "";
+        secondSemList.innerHTML = "";
+
+        const firstSemCourses = enrolled.filter(course => curriculumSemesterMapping[course.code] === 1);
+        const secondSemCourses = enrolled.filter(course => curriculumSemesterMapping[course.code] === 2);
+
+        if (firstSemCourses.length === 0) {
+            firstSemList.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #6d7f9b; padding: 28px;">No first semester courses enrolled.</td></tr>`;
+        } else {
+            firstSemCourses.forEach(course => {
+                firstSemList.innerHTML += createRow(course);
+            });
+        }
+
+        if (secondSemCourses.length === 0) {
+            secondSemList.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #6d7f9b; padding: 28px;">No second semester courses enrolled.</td></tr>`;
+        } else {
+            secondSemCourses.forEach(course => {
+                secondSemList.innerHTML += createRow(course);
+            });
+        }
+    }
+
+    function createRow(course) {
+        return `
+            <tr>
+                <td><span class="course-code-text">${course.code}</span></td>
+                <td><span class="course-title-text">${course.title}</span></td>
+                <td><strong>${course.units}</strong></td>
+                <td><span class="status-badge enrolled">Enrolled</span></td>
+                <td>
+                    <button class="drop-btn" onclick="confirmDropCourse('${course.code}')">Drop</button>
+                </td>
+            </tr>
+        `;
+    }
+</script>
+</body>
+</html>
