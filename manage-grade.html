@@ -317,7 +317,7 @@
 
 <script src="script.js"></script>
 <script>
-    // Map connecting course codes to curriculum semesters
+    // Explicit map connecting course codes to curriculum semesters
     const curriculumSemesterMapping = {
         'CS 101': 1,
         'MTH 211': 1,
@@ -361,9 +361,9 @@
 
     function createRow(course) {
         const cleanId = course.code.replace(/\s+/g, '');
-        const currentGrade = (course.grade && course.grade.toString().trim() !== "") ? parseFloat(course.grade).toFixed(2) : "";
+        const currentGrade = (course.grade && course.grade.trim() !== "") ? parseFloat(course.grade).toFixed(2) : "";
         
-        // Setup status badge
+        // Setup status context 
         let statusBadgeMarkup = "";
         if (currentGrade !== "") {
             statusBadgeMarkup = `<span class="status-badge graded">Graded (${currentGrade})</span>`;
