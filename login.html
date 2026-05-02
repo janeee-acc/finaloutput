@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login - Student Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
@@ -15,6 +16,7 @@
         min-height: 100vh;
         font-family: 'Poppins', sans-serif;
         margin: 0;
+        padding: 20px; /* Provides breathing room on small mobile devices */
     }
     .login-container {
         background: #ffffff;
@@ -88,6 +90,7 @@
         color: #1e2f5c;
         background: #fafbfc;
         transition: all 0.3s;
+        -webkit-appearance: none; /* Prevents iOS default styling overrides */
     }
     .form-group input:focus {
         outline: none;
@@ -116,6 +119,20 @@
         margin-top: 14px;
         text-align: center;
         display: none;
+    }
+
+    /* --- Mobile Responsive Rules --- */
+    @media screen and (max-width: 480px) {
+        .login-container {
+            padding: 30px 20px; /* Reduce inner padding on small phones */
+            border-radius: 10px;
+        }
+        .login-header {
+            margin-bottom: 24px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
     }
 </style>
 </head>
@@ -149,6 +166,13 @@
     const VALID_STUDENT_ID = "2023-7406-A";
     const VALID_PASSWORD = "12345";
 
+    // Access guard: Redirect immediately if session token is already active
+    document.addEventListener("DOMContentLoaded", function() {
+        if (localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true') {
+            window.location.href = 'index.html';
+        }
+    });
+
     function handleLogin(event) {
         event.preventDefault();
         
@@ -156,7 +180,9 @@
         const passwordInput = document.getElementById('password').value;
         const errorMsg = document.getElementById('loginError');
 
-        if (studentIdInput === VALID_STUDENT_ID && passwordInput === VALID_PASSWORD) {
+        // Case-insensitive validation for user friendliness
+        if (studentIdInput.toUpperCase() === VALID_STUDENT_ID.toUpperCase() && passwordInput === VALID_PASSWORD) {
+            localStorage.setItem('isLoggedIn', 'true');
             sessionStorage.setItem('isLoggedIn', 'true');
             sessionStorage.setItem('studentId', studentIdInput);
             errorMsg.style.display = 'none';

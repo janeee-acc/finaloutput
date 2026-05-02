@@ -1,570 +1,249 @@
-/* GENERAL RESET */
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* ==========================================================================
+   MODAL OVERLAYS & DIALOGS
+   ========================================================================== */
 
-body {
-    display: flex;
-    background: #f3f5f9;
-    font-family: 'Poppins', sans-serif;
-    min-height: 100vh;
-}
-
-/* SIDEBAR */
-.sidebar {
-    width: 240px;
-    height: 100vh;
-    background: #e9edf4;
-    padding: 35px 25px;
-    border-right: 1px solid #cfd6e4;
-    position: sticky;
-    top: 0;
-}
-
-/* LOGO */
-.logo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 45px;
-}
-
-.logo-icon {
-    position: relative;
-    width: 34px;
-    height: 34px;
-    margin-bottom: 10px;
-}
-
-.logo-icon div {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    border-radius: 6px;
-}
-
-.logo-icon .green {
-    background: #9be22d;
+/* Custom Modal Overlay */
+.modal-overlay {
+    display: none;
+    position: fixed;
     top: 0;
     left: 0;
-}
-
-.logo-icon .blue {
-    background: #5d7fc9;
-    bottom: 0;
-    right: 0;
-}
-
-.logo-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    color: #0E2C75;
-    font-weight: 600;
-}
-
-/* MENU */
-.menu a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 10px;
-    color: #6d7f9b;
-    text-decoration: none;
-    font-size: 14px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    margin-bottom: 5px;
-}
-
-.menu a:hover {
-    background: #dfe7f5;
-    color: #0E2C75;
-}
-
-.menu a.active {
-    color: #1e2f5c;
-    font-weight: 500;
-    background: #dfe7f5;
-}
-
-.menu span {
-    font-size: 20px;
-}
-
-/* MAIN CONTENT */
-.main {
-    flex: 1;
-    padding: 35px 60px;
-}
-
-/* TOP BAR */
-.top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #cfd6e4;
-    padding-bottom: 15px;
-}
-
-.top h2 {
-    font-size: 20px;
-    font-weight: 500;
-    color: #0E2C75;
-}
-
-/* USER PROFILE (TOP RIGHT) */
-/* USER PROFILE CONTAINER (Relative for dropdown positioning) */
-.user {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    user-select: none;
-}
-
-/* DROPDOWN MENU */
-.user-dropdown {
-    display: none;
-    position: absolute;
-    top: 55px;
-    right: 0;
-    background: #ffffff;
-    border: 1.5px solid #cfd6e4;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    width: 150px;
-    z-index: 100;
-    overflow: hidden;
-}
-
-.user-dropdown.show {
-    display: block;
-}
-
-.dropdown-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    text-decoration: none;
-    color: #1e2f5c;
-    font-size: 13px;
-    font-weight: 500;
-    transition: background 0.2s ease;
-}
-
-.dropdown-item:hover {
-    background: #f1f4f9;
-    color: #d63c4c; /* Highlight logout in a subtle red/pink tone */
-}
-
-.dropdown-item span {
-    font-size: 18px;
-}
-
-.profile {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #d0d6e2;
-    display: flex;
+    width: 100%;
+    height: 100%;
+    background: rgba(14, 44, 117, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
     align-items: center;
     justify-content: center;
 }
 
-.profile span {
-    font-size: 20px;
-    color: #5d6f8c;
-}
-
-.user-info strong {
-    font-size: 13px;
-    color: #0E2C75;
-    line-height: 1.2;
-}
-
-.user-info span {
-    font-size: 12px;
-    color: #8c9bb5;
-}
-
-.arrow {
-    color: #8c9bb5;
-    font-size: 20px;
-}
-
-/* WELCOME SECTION */
-.welcome {
-    margin-top: 30px;
+/* Modal Card */
+.modal-card {
     background: #ffffff;
     border: 1.5px solid #cfd6e4;
-    border-radius: 8px;
-    padding: 18px 22px;
-    max-width: 760px;
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(14, 44, 117, 0.08);
+    animation: modalSlideIn 0.3s ease;
 }
 
-.welcome h3 {
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modal Icon & Container */
+.modal-icon-container {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px auto;
+}
+
+.modal-icon-container.success {
+    background: #edfcf2;
+    color: #12b76a;
+    border: 1px solid #12b76a;
+}
+
+.modal-icon-container.warning {
+    background: #fffcf0;
+    color: #f0cf63;
+    border: 1px solid #e3a900;
+}
+
+.modal-icon-container.error {
+    background: #fff1f2;
+    color: #f04438;
+    border: 1px solid #f04438;
+}
+
+.modal-icon-container span {
+    font-size: 32px;
+}
+
+/* Modal Typography */
+.modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
     color: #0E2C75;
     margin-bottom: 8px;
-    font-size: 18px;
 }
 
-.welcome p {
+.modal-message {
     font-size: 14px;
     color: #6d7f9b;
-    line-height: 1.6;
+    line-height: 1.5;
+    margin-bottom: 24px;
 }
 
-/* CARDS SECTION */
-.cards {
-    margin-top: 50px;
+/* Modal Action Buttons */
+.modal-btn-group {
     display: flex;
-    gap: 25px;
-    flex-wrap: wrap;
-}
-
-.card {
-    width: 220px;
-    height: 150px;
-    border-radius: 12px;
-    text-align: center;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
+    gap: 12px;
     justify-content: center;
-    transition: transform 0.2s ease;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-}
-
-.card h4 {
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.card .num {
-    font-size: 32px;
-    font-weight: 600;
-    margin: 8px 0;
-}
-
-.card p {
-    font-size: 12px;
-    font-weight: 400;
-}
-
-/* CARD COLORS */
-.yellow {
-    background: #f0cf63;
-    border: 1.5px solid #e3a900;
-    color: #7a4e00;
-}
-
-.pink {
-    background: #efc0c6;
-    border: 1.5px solid #d63c4c;
-    color: #8a1c2c;
-}
-
-.gray {
-    background: #c7d0d8;
-    border: 1.5px solid #7f94a6;
-    color: #3c4b5a;
-}
-
-/* GRADE SECTION */
-.grade-section {
-    margin-top: 30px;
-    background: #ffffff;
-    border: 1.5px solid #cfd6e4;
-    border-radius: 12px;
-    padding: 25px;
-    max-width: 1000px;
-}
-
-.section-header h3 {
-    color: #0E2C75;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.section-header p {
-    font-size: 13px;
-    color: #6d7f9b;
-    margin-bottom: 20px;
-}
-
-/* GRADE TABLE */
-.table-container {
-    overflow-x: auto;
-}
-
-.grade-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-
-.grade-table th {
-    background: #f8fafc;
-    color: #6d7f9b;
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-    padding: 14px 16px;
-    border-bottom: 1.5px solid #cfd6e4;
-}
-
-.grade-table td {
-    padding: 16px;
-    font-size: 14px;
-    color: #1e2f5c;
-    border-bottom: 1px solid #e9edf4;
-    vertical-align: middle;
-}
-
-.grade-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-/* INPUTS & BUTTONS */
-.grade-input {
-    width: 110px;
-    padding: 8px 12px;
-    border: 1.5px solid #cfd6e4;
+.modal-btn {
+    flex: 1;
+    padding: 10px 16px;
     border-radius: 6px;
     font-family: 'Poppins', sans-serif;
     font-size: 13px;
-    color: #1e2f5c;
-    outline: none;
-    transition: border-color 0.2s ease;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.grade-input:focus {
-    border-color: #5d7fc9;
-}
-
-.save-btn {
+.modal-btn.primary {
     background: #5d7fc9;
     color: #ffffff;
     border: none;
-    padding: 8px 16px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
 }
 
-.save-btn:hover {
+.modal-btn.primary:hover {
     background: #4663a8;
 }
 
-/* ENROLLED SECTION */
-.enrolled-section {
-    margin-top: 30px;
+.modal-btn.secondary {
     background: #ffffff;
-    border: 1.5px solid #cfd6e4;
-    border-radius: 12px;
-    padding: 25px;
-    max-width: 1000px;
-}
-
-.section-header h3 {
-    color: #0E2C75;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.section-header p {
-    font-size: 13px;
     color: #6d7f9b;
-    margin-bottom: 20px;
+    border: 1.5px solid #cfd6e4;
 }
 
-/* ENROLLED TABLE */
-.table-container {
-    overflow-x: auto;
-}
-
-.enrolled-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-
-.enrolled-table th {
+.modal-btn.secondary:hover {
     background: #f8fafc;
-    color: #6d7f9b;
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-    padding: 14px 16px;
-    border-bottom: 1.5px solid #cfd6e4;
-}
-
-.enrolled-table td {
-    padding: 16px;
-    font-size: 14px;
     color: #1e2f5c;
-    border-bottom: 1px solid #e9edf4;
-    vertical-align: middle;
 }
 
-.enrolled-table tbody tr:last-child td {
-    border-bottom: none;
+
+/* ==========================================================================
+   SEMESTER SECTIONS & TIMELINES
+   ========================================================================== */
+
+.semester-section {
+    margin-bottom: 40px;
 }
 
-/* STATUS BADGE */
-.status-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 50px;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.status-badge.enrolled {
-    background: #eefcf3;
-    color: #117d3d;
-    border: 1px solid #b7efcd;
-}
-
-/* DROP BUTTON (Matches the Save Button exactly in structure) */
-.drop-btn {
-    background: #5d7fc9;
-    color: #ffffff;
-    border: none;
-    padding: 8px 16px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.drop-btn:hover {
-    background: #4663a8;
-}
-
-/* COURSES SECTION */
-.courses-section {
-    margin-top: 30px;
-    max-width: 1000px;
-}
-
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 25px;
-    margin-top: 20px;
-}
-
-.course-card {
-    background: #ffffff;
-    border: 1.5px solid #cfd6e4;
-    border-radius: 12px;
-    padding: 22px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 250px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.course-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-}
-
-.course-header {
+.semester-title {
+    color: #0E2C75;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #cfd6e4;
+    padding-bottom: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
 }
 
-.course-code {
-    background: #dfe7f5;
-    color: #1e2f5c;
+
+/* ==========================================================================
+   UTILITIES & ADDITIONAL BADGES
+   ========================================================================== */
+
+/* Completed status badge for curriculum views */
+.completed-badge {
+    background: #edfcf2;
+    color: #12b76a;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
     padding: 4px 10px;
-    border-radius: 6px;
+    border-radius: 4px;
+    border: 1px solid #12b76a;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
-.course-units {
-    font-size: 12px;
-    color: #6d7f9b;
-    font-weight: 500;
-}
-
-.course-card h4 {
-    font-size: 16px;
-    color: #1e2f5c;
-    font-weight: 600;
-    margin-bottom: 6px;
-    line-height: 1.4;
-}
-
-.prereq {
-    font-size: 12px;
-    color: #6d7f9b;
-    margin-bottom: 15px;
-}
-
-.prereq span {
-    font-weight: 600;
-    color: #1e2f5c;
-}
-
-/* CAPACITY BAR */
-.capacity-bar {
-    background: #e9edf4;
-    height: 6px;
-    border-radius: 10px;
-    width: 100%;
-    margin-bottom: 6px;
-    overflow: hidden;
-}
-
-.capacity-fill {
-    background: #5d7fc9;
-    height: 100%;
-    border-radius: 10px;
-    transition: width 0.3s ease;
-}
-
-.capacity-text {
-    font-size: 12px;
-    color: #6d7f9b;
-    margin-bottom: 18px;
-}
-
-/* ENROLL BUTTON (Matches the Save & Drop buttons exactly) */
-.enroll-btn {
-    background: #5d7fc9;
-    color: #ffffff;
-    border: none;
-    padding: 10px 16px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 100%;
+/* Empty state styling */
+.empty-state {
     text-align: center;
-    transition: background-color 0.2s ease;
+    color: #6d7f9b;
+    padding: 30px 20px;
+    font-size: 14px;
+    background: #fafbfc;
+    border: 1px dashed #cfd6e4;
+    border-radius: 8px;
+    margin: 20px 0;
 }
 
-.enroll-btn:hover {
-    background: #4663a8;
+/* Button disabled state */
+.enroll-btn:disabled,
+.drop-btn:disabled,
+.save-btn:disabled {
+    background: #b9c8e4;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT BREAKPOINTS
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .main {
+        padding: 35px 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 20px;
+        border-right: none;
+        border-bottom: 1px solid #cfd6e4;
+    }
+
+    .logo {
+        margin-bottom: 20px;
+    }
+
+    .menu {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .menu a {
+        margin-bottom: 0;
+        flex: 1;
+        min-width: 140px;
+        justify-content: center;
+    }
+
+    .main {
+        padding: 25px 20px;
+    }
+
+    .cards {
+        gap: 15px;
+    }
+
+    .card {
+        width: 100%;
+        height: 130px;
+    }
 }
